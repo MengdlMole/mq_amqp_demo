@@ -1,0 +1,39 @@
+logging:
+  pattern:
+    dataformat: MM-dd HH:mm:ss:SS
+  level:
+    com.mengdl:
+      publisher: debug
+      consumer: debug
+spring:
+  rabbitmq:
+    host: localhost  # 主机名
+    port: 5672  # 端口
+    virtual-host: /hmall  # 虚拟主机
+    username: hmall  # 用户名
+    password: hmall  # 密码
+    listener:
+      simple:
+        prefetch: 1  # （能者多劳）每次消费消息的数量, 默认为1, 处理完才能获取后面的消息
+        acknowledge-mode: auto  # 自动确认
+        retry:
+          enabled: true  # 是否开启消费者失败重试
+          max-attempts: 3  # 最大重试次数
+          initial-interval: 1000ms  # 初始重试间隔
+          multiplier: 1  # 重试间隔的倍数，initial-interval = initial-interval * multiplier
+          stateless: true  # true是无状态，false是有状态。如果业务中包含事务，建议设置为false
+    connection-timeout: 5000ms  # 连接MQ超时的时间
+    template:
+      # mandatory: true  # 强制性的
+      # receive-timeout: 5000  # 接收消息超时的时间
+      retry:
+        enabled: true  # 是否重试
+        max-attempts: 3  # 最大重试次数
+        initial-interval: 1000ms  # 初始重试间隔
+        multiplier: 1.0  # 重试间隔的倍数，initial-interval = initial-interval * multiplier
+        max-interval: 10000ms  # 最大重试间隔
+        stateless: true  # true是无状态，false是有状态。如果业务中包含事务，建议设置为false
+    # publisher-confirms: true  # 开启publisher confirm机制
+    # publisher-confirm-type: correlated  # 开启publisher confirm机制，并且设置confirm类型
+      publisher-confirm-type: false  # 开启publisher confirm机制，并且设置confirm类型
+    publisher-returns: true  # 开启publisher return机制
